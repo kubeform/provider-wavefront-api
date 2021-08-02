@@ -1,0 +1,1066 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: wavefront.kubeform.com
+    app.kubernetes.io/part-of: kubeform.com
+  name: dashboards.dashboard.wavefront.kubeform.com
+spec:
+  group: dashboard.wavefront.kubeform.com
+  names:
+    kind: Dashboard
+    listKind: DashboardList
+    plural: dashboards
+    singular: dashboard
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.phase
+      name: Phase
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              providerRef:
+                description: LocalObjectReference contains enough information to let
+                  you locate the referenced object inside the same namespace.
+                properties:
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                type: object
+              resource:
+                properties:
+                  canModify:
+                    items:
+                      type: string
+                    type: array
+                  canView:
+                    items:
+                      type: string
+                    type: array
+                  description:
+                    type: string
+                  displayQueryParameters:
+                    type: boolean
+                  displaySectionTableOfContents:
+                    type: boolean
+                  eventFilterType:
+                    type: string
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  parameterDetails:
+                    items:
+                      properties:
+                        defaultValue:
+                          type: string
+                        dynamicFieldType:
+                          type: string
+                        hideFromView:
+                          type: boolean
+                        label:
+                          type: string
+                        name:
+                          type: string
+                        parameterType:
+                          type: string
+                        queryValue:
+                          type: string
+                        tagKey:
+                          type: string
+                        valuesToReadableStrings:
+                          additionalProperties:
+                            type: string
+                          description: Map of [string]string. At least one of the
+                            keys must match the value of default_value.
+                          type: object
+                      required:
+                      - defaultValue
+                      - hideFromView
+                      - label
+                      - name
+                      - parameterType
+                      - valuesToReadableStrings
+                      type: object
+                    type: array
+                  section:
+                    description: Sections of a Dashboard
+                    items:
+                      properties:
+                        name:
+                          description: Name of the Sections
+                          type: string
+                        row:
+                          description: Rows containing chart. Rows belong in Sections
+                          items:
+                            properties:
+                              chart:
+                                description: A collection of chart
+                                items:
+                                  properties:
+                                    base:
+                                      description: Base of logarithmic scale, default
+                                        is 0 for linear scale
+                                      format: int64
+                                      type: integer
+                                    chartAttribute:
+                                      type: string
+                                    chartSetting:
+                                      description: Chart settings. Defaults to line
+                                        charts
+                                      properties:
+                                        autoColumnTags:
+                                          description: deprecated
+                                          type: boolean
+                                        columnTags:
+                                          description: deprecated
+                                          type: string
+                                        customTags:
+                                          description: For the tabular view, a list
+                                            of point tags to display when using the
+                                            custom tag display mode
+                                          items:
+                                            type: string
+                                          type: array
+                                        expectedDataSpacing:
+                                          description: 'Threshold (in seconds) for
+                                            time delta between consecutive points
+                                            in a series above which a dotted line
+                                            will replace a solid line in line plots.
+                                            Default: 60s'
+                                          format: int64
+                                          type: integer
+                                        fixedLegendDisplayStats:
+                                          description: For a chart with a fixed legend,
+                                            a list of statistics to display in the
+                                            legend
+                                          items:
+                                            type: string
+                                          type: array
+                                        fixedLegendEnabled:
+                                          description: Whether to enable a fixed tabular
+                                            legend adjacent to the chart
+                                          type: boolean
+                                        fixedLegendFilterField:
+                                          description: Statistic to use for determining
+                                            whether a series is displayed on the fixed
+                                            legend = ['CURRENT', 'MEAN', 'MEDIAN',
+                                            'SUM', 'MIN', 'MAX', 'COUNT']
+                                          type: string
+                                        fixedLegendFilterLimit:
+                                          description: Number of series to include
+                                            in the fixed legend
+                                          format: int64
+                                          type: integer
+                                        fixedLegendFilterSort:
+                                          description: Whether to display Top- or
+                                            Bottom-ranked series in the fixed legend
+                                            = ['TOP', 'BOTTOM']
+                                          type: string
+                                        fixedLegendHideLabel:
+                                          description: deprecated
+                                          type: boolean
+                                        fixedLegendPosition:
+                                          description: Where the fixed legend should
+                                            be displayed with respect to the chart
+                                            = ['RIGHT', 'TOP', 'LEFT', 'BOTTOM']
+                                          type: string
+                                        fixedLegendUseRawStats:
+                                          description: If true, the legend uses non-summarized
+                                            stats instead of summarized
+                                          type: boolean
+                                        groupBySource:
+                                          description: For the tabular view, whether
+                                            to group multi metrics into a single row
+                                            by a common source. If false, each metric
+                                            for each source is displayed in its own
+                                            row. If true, multiple metrics for the
+                                            same host will be displayed as different
+                                            columns in the same row
+                                          type: boolean
+                                        invertDynamicLegendHoverControl:
+                                          description: Whether to disable the display
+                                            of the floating legend (but reenable it
+                                            when the ctrl-key is pressed)
+                                          type: boolean
+                                        lineType:
+                                          description: Plot interpolation type. linear
+                                            is default = ['linear', 'step-before',
+                                            'step-after', 'basis', 'cardinal', 'monotone']
+                                          type: string
+                                        max:
+                                          description: Max value of Y-axis. Set to
+                                            null or leave blank for auto
+                                          format: double
+                                          type: number
+                                        min:
+                                          description: Min value of Y-axis. Set to
+                                            null or leave blank for auto
+                                          format: double
+                                          type: number
+                                        numTags:
+                                          description: For the tabular view, how many
+                                            point tags to display
+                                          format: int64
+                                          type: integer
+                                        plainMarkdownContent:
+                                          description: The Markdown content for a
+                                            Markdown display, in plain text. Use this
+                                            field instead of markdownContent
+                                          type: string
+                                        showHosts:
+                                          description: 'For the tabular view, whether
+                                            to display sources. Default: true'
+                                          type: boolean
+                                        showLabels:
+                                          description: 'For the tabular view, whether
+                                            to display labels. Default: true'
+                                          type: boolean
+                                        showRawValues:
+                                          description: 'For the tabular view, whether
+                                            to display raw values. Default: false'
+                                          type: boolean
+                                        sortValuesDescending:
+                                          description: 'For the tabular view, whether
+                                            to display display values in descending
+                                            order. Default: false'
+                                          type: boolean
+                                        sparklineDecimalPrecision:
+                                          description: For the single stat view, the
+                                            decimal precision of the displayed number
+                                          format: int64
+                                          type: integer
+                                        sparklineDisplayColor:
+                                          description: For the single stat view, the
+                                            color of the displayed text (when not
+                                            dynamically determined). Values should
+                                            be in rgba(, , ,  format
+                                          type: string
+                                        sparklineDisplayFontSize:
+                                          description: For the single stat view, the
+                                            font size of the displayed text, in percent
+                                          type: string
+                                        sparklineDisplayHorizontalPosition:
+                                          description: For the single stat view, the
+                                            horizontal position of the displayed text
+                                            = ['MIDDLE', 'LEFT', 'RIGHT']
+                                          type: string
+                                        sparklineDisplayPostfix:
+                                          description: For the single stat view, a
+                                            string to append to the displayed text
+                                          type: string
+                                        sparklineDisplayPrefix:
+                                          description: For the single stat view, a
+                                            string to add before the displayed text
+                                          type: string
+                                        sparklineDisplayValueType:
+                                          description: For the single stat view, whether
+                                            to display the name of the query or the
+                                            value of query = ['VALUE', 'LABEL']
+                                          type: string
+                                        sparklineDisplayVerticalPosition:
+                                          description: deprecated
+                                          type: string
+                                        sparklineFillColor:
+                                          description: For the single stat view, the
+                                            color of the background fill. Values should
+                                            be in rgba(, , ,  format
+                                          type: string
+                                        sparklineLineColor:
+                                          description: For the single stat view, the
+                                            color of the line. Values should be in
+                                            rgba(, , ,  format
+                                          type: string
+                                        sparklineSize:
+                                          description: For the single stat view, a
+                                            misleadingly named property. This determines
+                                            whether the sparkline of the statistic
+                                            is displayed in the chart BACKGROUND,
+                                            BOTTOM, or NONE = ['BACKGROUND', 'BOTTOM',
+                                            'NONE']
+                                          type: string
+                                        sparklineValueColorMapApplyTo:
+                                          description: For the single stat view, whether
+                                            to apply dynamic color settings to the
+                                            displayed TEXT or BACKGROUND = ['TEXT',
+                                            'BACKGROUND']
+                                          type: string
+                                        sparklineValueColorMapColors:
+                                          description: For the single stat view, a
+                                            list of colors that differing query values
+                                            map to. Must contain one more element
+                                            than sparklineValueColorMapValuesV2. Values
+                                            should be in rgba(, , ,  format
+                                          items:
+                                            type: string
+                                          type: array
+                                        sparklineValueColorMapValues:
+                                          description: deprecated
+                                          items:
+                                            format: int64
+                                            type: integer
+                                          type: array
+                                        sparklineValueColorMapValuesV2:
+                                          description: deprecated
+                                          items:
+                                            format: double
+                                            type: number
+                                          type: array
+                                        sparklineValueTextMapText:
+                                          description: For the single stat view, a
+                                            list of display text values that different
+                                            query values map to. Must contain one
+                                            more element than sparklineValueTextMapThresholds
+                                          items:
+                                            type: string
+                                          type: array
+                                        sparklineValueTextMapThresholds:
+                                          description: For the single stat view, a
+                                            list of threshold boundaries for mapping
+                                            different query values to display text.
+                                            Must contain one less element than sparklineValueTextMapText
+                                          items:
+                                            format: double
+                                            type: number
+                                          type: array
+                                        stackType:
+                                          description: Type of stacked chart (applicable
+                                            only if chart type is stacked). zero (default)
+                                            means stacked from y=0. expand means Normalized
+                                            from 0 to 1. wiggle means Minimize weighted
+                                            changes. silhouette means to Center the
+                                            Stream = ['zero', 'expand', 'wiggle',
+                                            'silhouette']
+                                          type: string
+                                        tagMode:
+                                          description: For the tabular view, which
+                                            mode to use to determine which point tags
+                                            to display = ['all', 'top', 'custom']
+                                          type: string
+                                        timeBasedColoring:
+                                          description: 'Fox x-y scatterplots, whether
+                                            to color more recent points as darker
+                                            than older points. Default: false'
+                                          type: boolean
+                                        type:
+                                          description: Chart Type. 'line' refers to
+                                            the Line Plot, 'scatter' to the Point
+                                            Plot, 'stacked-area' to the Stacked Area
+                                            plot, 'table' to the Tabular View, 'scatterploy-xy'
+                                            to Scatter Plot, 'markdown-widget' to
+                                            the Markdown display, and 'sparkline'
+                                            to the Single Stat view = ['line', 'scatterplot',
+                                            'stacked-area', 'table', 'scatterplot-xy',
+                                            'markdown-widget', 'sparkline']
+                                          type: string
+                                        windowSize:
+                                          description: Width, in minutes, of the time
+                                            window to use for last windowing
+                                          format: int64
+                                          type: integer
+                                        windowing:
+                                          description: For the tabular view, whether
+                                            to use the full time window for the query
+                                            or the last X minutes = ['full', 'last']
+                                          type: string
+                                        xmax:
+                                          description: For x-y scatterplots, max value
+                                            for X-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                        xmin:
+                                          description: For x-y scatterplots, min value
+                                            for X-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                        y0ScaleSiBy1024:
+                                          description: 'Default: false. Whether to
+                                            scale numerical magnitude labels for left
+                                            Y-axis by 1024 in the IEC/Binary manner
+                                            (instead of by 1000 like SI) ,'
+                                          type: boolean
+                                        y0UnitAutoscaling:
+                                          description: 'Default: false. Whether to
+                                            automatically adjust magnitude labels
+                                            and units for the left Y-axis to favor
+                                            smaller magnitudes and larger units'
+                                          type: boolean
+                                        y1ScaleSiBy1024:
+                                          description: 'Default: false. Whether to
+                                            scale numerical magnitude labels for right
+                                            Y-axis by 1024 in the IEC/Binary manner
+                                            (instead of by 1000 like SI)'
+                                          type: boolean
+                                        y1UnitAutoscaling:
+                                          description: 'Default: false. Whether to
+                                            automatically adjust magnitude labels
+                                            and units for the right Y-axis to favor
+                                            smaller magnitudes and larger units'
+                                          type: boolean
+                                        y1Units:
+                                          description: For plots with multiple Y-axes,
+                                            units for right-side Y-axis
+                                          type: string
+                                        y1max:
+                                          description: For plots with multiple Y-axes,
+                                            max value for right-side Y-axis. Set null
+                                            for auto
+                                          format: double
+                                          type: number
+                                        y1min:
+                                          description: For plots with multiple Y-axes,
+                                            min value for right-side Y-axis. Set null
+                                            for auto
+                                          format: double
+                                          type: number
+                                        ymax:
+                                          description: For x-y scatterplots, max value
+                                            for Y-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                        ymin:
+                                          description: For x-y scatterplots, min value
+                                            for Y-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                      required:
+                                      - type
+                                      type: object
+                                    description:
+                                      description: Description of the chart
+                                      type: string
+                                    name:
+                                      description: Name of the Chart
+                                      type: string
+                                    source:
+                                      description: A collection of Sources for a Chart
+                                      items:
+                                        properties:
+                                          disabled:
+                                            description: Whether to disabled the source
+                                              from being displayed
+                                            type: boolean
+                                          name:
+                                            description: Name of the Source
+                                            type: string
+                                          query:
+                                            description: Query for the Source
+                                            type: string
+                                          queryBuilderEnabled:
+                                            description: Whether the query builder
+                                              should be enabled
+                                            type: boolean
+                                          scatterPlotSource:
+                                            type: string
+                                          sourceDescription:
+                                            description: Description of the source
+                                            type: string
+                                        required:
+                                        - name
+                                        - query
+                                        type: object
+                                      type: array
+                                    summarization:
+                                      description: Summarization strategy for the
+                                        chart. MEAN is default = ['MEAN', 'MEDIAN',
+                                        'MIN', 'MAX', 'SUM', 'COUNT', 'LAST', 'FIRST']
+                                      type: string
+                                    units:
+                                      description: Units of measurements for the chart
+                                      type: string
+                                  required:
+                                  - chartSetting
+                                  - name
+                                  - source
+                                  - summarization
+                                  - units
+                                  type: object
+                                type: array
+                            required:
+                            - chart
+                            type: object
+                          type: array
+                      required:
+                      - name
+                      - row
+                      type: object
+                    type: array
+                  tags:
+                    items:
+                      type: string
+                    type: array
+                  url:
+                    type: string
+                required:
+                - description
+                - name
+                - section
+                - tags
+                - url
+                type: object
+              state:
+                properties:
+                  canModify:
+                    items:
+                      type: string
+                    type: array
+                  canView:
+                    items:
+                      type: string
+                    type: array
+                  description:
+                    type: string
+                  displayQueryParameters:
+                    type: boolean
+                  displaySectionTableOfContents:
+                    type: boolean
+                  eventFilterType:
+                    type: string
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  parameterDetails:
+                    items:
+                      properties:
+                        defaultValue:
+                          type: string
+                        dynamicFieldType:
+                          type: string
+                        hideFromView:
+                          type: boolean
+                        label:
+                          type: string
+                        name:
+                          type: string
+                        parameterType:
+                          type: string
+                        queryValue:
+                          type: string
+                        tagKey:
+                          type: string
+                        valuesToReadableStrings:
+                          additionalProperties:
+                            type: string
+                          description: Map of [string]string. At least one of the
+                            keys must match the value of default_value.
+                          type: object
+                      required:
+                      - defaultValue
+                      - hideFromView
+                      - label
+                      - name
+                      - parameterType
+                      - valuesToReadableStrings
+                      type: object
+                    type: array
+                  section:
+                    description: Sections of a Dashboard
+                    items:
+                      properties:
+                        name:
+                          description: Name of the Sections
+                          type: string
+                        row:
+                          description: Rows containing chart. Rows belong in Sections
+                          items:
+                            properties:
+                              chart:
+                                description: A collection of chart
+                                items:
+                                  properties:
+                                    base:
+                                      description: Base of logarithmic scale, default
+                                        is 0 for linear scale
+                                      format: int64
+                                      type: integer
+                                    chartAttribute:
+                                      type: string
+                                    chartSetting:
+                                      description: Chart settings. Defaults to line
+                                        charts
+                                      properties:
+                                        autoColumnTags:
+                                          description: deprecated
+                                          type: boolean
+                                        columnTags:
+                                          description: deprecated
+                                          type: string
+                                        customTags:
+                                          description: For the tabular view, a list
+                                            of point tags to display when using the
+                                            custom tag display mode
+                                          items:
+                                            type: string
+                                          type: array
+                                        expectedDataSpacing:
+                                          description: 'Threshold (in seconds) for
+                                            time delta between consecutive points
+                                            in a series above which a dotted line
+                                            will replace a solid line in line plots.
+                                            Default: 60s'
+                                          format: int64
+                                          type: integer
+                                        fixedLegendDisplayStats:
+                                          description: For a chart with a fixed legend,
+                                            a list of statistics to display in the
+                                            legend
+                                          items:
+                                            type: string
+                                          type: array
+                                        fixedLegendEnabled:
+                                          description: Whether to enable a fixed tabular
+                                            legend adjacent to the chart
+                                          type: boolean
+                                        fixedLegendFilterField:
+                                          description: Statistic to use for determining
+                                            whether a series is displayed on the fixed
+                                            legend = ['CURRENT', 'MEAN', 'MEDIAN',
+                                            'SUM', 'MIN', 'MAX', 'COUNT']
+                                          type: string
+                                        fixedLegendFilterLimit:
+                                          description: Number of series to include
+                                            in the fixed legend
+                                          format: int64
+                                          type: integer
+                                        fixedLegendFilterSort:
+                                          description: Whether to display Top- or
+                                            Bottom-ranked series in the fixed legend
+                                            = ['TOP', 'BOTTOM']
+                                          type: string
+                                        fixedLegendHideLabel:
+                                          description: deprecated
+                                          type: boolean
+                                        fixedLegendPosition:
+                                          description: Where the fixed legend should
+                                            be displayed with respect to the chart
+                                            = ['RIGHT', 'TOP', 'LEFT', 'BOTTOM']
+                                          type: string
+                                        fixedLegendUseRawStats:
+                                          description: If true, the legend uses non-summarized
+                                            stats instead of summarized
+                                          type: boolean
+                                        groupBySource:
+                                          description: For the tabular view, whether
+                                            to group multi metrics into a single row
+                                            by a common source. If false, each metric
+                                            for each source is displayed in its own
+                                            row. If true, multiple metrics for the
+                                            same host will be displayed as different
+                                            columns in the same row
+                                          type: boolean
+                                        invertDynamicLegendHoverControl:
+                                          description: Whether to disable the display
+                                            of the floating legend (but reenable it
+                                            when the ctrl-key is pressed)
+                                          type: boolean
+                                        lineType:
+                                          description: Plot interpolation type. linear
+                                            is default = ['linear', 'step-before',
+                                            'step-after', 'basis', 'cardinal', 'monotone']
+                                          type: string
+                                        max:
+                                          description: Max value of Y-axis. Set to
+                                            null or leave blank for auto
+                                          format: double
+                                          type: number
+                                        min:
+                                          description: Min value of Y-axis. Set to
+                                            null or leave blank for auto
+                                          format: double
+                                          type: number
+                                        numTags:
+                                          description: For the tabular view, how many
+                                            point tags to display
+                                          format: int64
+                                          type: integer
+                                        plainMarkdownContent:
+                                          description: The Markdown content for a
+                                            Markdown display, in plain text. Use this
+                                            field instead of markdownContent
+                                          type: string
+                                        showHosts:
+                                          description: 'For the tabular view, whether
+                                            to display sources. Default: true'
+                                          type: boolean
+                                        showLabels:
+                                          description: 'For the tabular view, whether
+                                            to display labels. Default: true'
+                                          type: boolean
+                                        showRawValues:
+                                          description: 'For the tabular view, whether
+                                            to display raw values. Default: false'
+                                          type: boolean
+                                        sortValuesDescending:
+                                          description: 'For the tabular view, whether
+                                            to display display values in descending
+                                            order. Default: false'
+                                          type: boolean
+                                        sparklineDecimalPrecision:
+                                          description: For the single stat view, the
+                                            decimal precision of the displayed number
+                                          format: int64
+                                          type: integer
+                                        sparklineDisplayColor:
+                                          description: For the single stat view, the
+                                            color of the displayed text (when not
+                                            dynamically determined). Values should
+                                            be in rgba(, , ,  format
+                                          type: string
+                                        sparklineDisplayFontSize:
+                                          description: For the single stat view, the
+                                            font size of the displayed text, in percent
+                                          type: string
+                                        sparklineDisplayHorizontalPosition:
+                                          description: For the single stat view, the
+                                            horizontal position of the displayed text
+                                            = ['MIDDLE', 'LEFT', 'RIGHT']
+                                          type: string
+                                        sparklineDisplayPostfix:
+                                          description: For the single stat view, a
+                                            string to append to the displayed text
+                                          type: string
+                                        sparklineDisplayPrefix:
+                                          description: For the single stat view, a
+                                            string to add before the displayed text
+                                          type: string
+                                        sparklineDisplayValueType:
+                                          description: For the single stat view, whether
+                                            to display the name of the query or the
+                                            value of query = ['VALUE', 'LABEL']
+                                          type: string
+                                        sparklineDisplayVerticalPosition:
+                                          description: deprecated
+                                          type: string
+                                        sparklineFillColor:
+                                          description: For the single stat view, the
+                                            color of the background fill. Values should
+                                            be in rgba(, , ,  format
+                                          type: string
+                                        sparklineLineColor:
+                                          description: For the single stat view, the
+                                            color of the line. Values should be in
+                                            rgba(, , ,  format
+                                          type: string
+                                        sparklineSize:
+                                          description: For the single stat view, a
+                                            misleadingly named property. This determines
+                                            whether the sparkline of the statistic
+                                            is displayed in the chart BACKGROUND,
+                                            BOTTOM, or NONE = ['BACKGROUND', 'BOTTOM',
+                                            'NONE']
+                                          type: string
+                                        sparklineValueColorMapApplyTo:
+                                          description: For the single stat view, whether
+                                            to apply dynamic color settings to the
+                                            displayed TEXT or BACKGROUND = ['TEXT',
+                                            'BACKGROUND']
+                                          type: string
+                                        sparklineValueColorMapColors:
+                                          description: For the single stat view, a
+                                            list of colors that differing query values
+                                            map to. Must contain one more element
+                                            than sparklineValueColorMapValuesV2. Values
+                                            should be in rgba(, , ,  format
+                                          items:
+                                            type: string
+                                          type: array
+                                        sparklineValueColorMapValues:
+                                          description: deprecated
+                                          items:
+                                            format: int64
+                                            type: integer
+                                          type: array
+                                        sparklineValueColorMapValuesV2:
+                                          description: deprecated
+                                          items:
+                                            format: double
+                                            type: number
+                                          type: array
+                                        sparklineValueTextMapText:
+                                          description: For the single stat view, a
+                                            list of display text values that different
+                                            query values map to. Must contain one
+                                            more element than sparklineValueTextMapThresholds
+                                          items:
+                                            type: string
+                                          type: array
+                                        sparklineValueTextMapThresholds:
+                                          description: For the single stat view, a
+                                            list of threshold boundaries for mapping
+                                            different query values to display text.
+                                            Must contain one less element than sparklineValueTextMapText
+                                          items:
+                                            format: double
+                                            type: number
+                                          type: array
+                                        stackType:
+                                          description: Type of stacked chart (applicable
+                                            only if chart type is stacked). zero (default)
+                                            means stacked from y=0. expand means Normalized
+                                            from 0 to 1. wiggle means Minimize weighted
+                                            changes. silhouette means to Center the
+                                            Stream = ['zero', 'expand', 'wiggle',
+                                            'silhouette']
+                                          type: string
+                                        tagMode:
+                                          description: For the tabular view, which
+                                            mode to use to determine which point tags
+                                            to display = ['all', 'top', 'custom']
+                                          type: string
+                                        timeBasedColoring:
+                                          description: 'Fox x-y scatterplots, whether
+                                            to color more recent points as darker
+                                            than older points. Default: false'
+                                          type: boolean
+                                        type:
+                                          description: Chart Type. 'line' refers to
+                                            the Line Plot, 'scatter' to the Point
+                                            Plot, 'stacked-area' to the Stacked Area
+                                            plot, 'table' to the Tabular View, 'scatterploy-xy'
+                                            to Scatter Plot, 'markdown-widget' to
+                                            the Markdown display, and 'sparkline'
+                                            to the Single Stat view = ['line', 'scatterplot',
+                                            'stacked-area', 'table', 'scatterplot-xy',
+                                            'markdown-widget', 'sparkline']
+                                          type: string
+                                        windowSize:
+                                          description: Width, in minutes, of the time
+                                            window to use for last windowing
+                                          format: int64
+                                          type: integer
+                                        windowing:
+                                          description: For the tabular view, whether
+                                            to use the full time window for the query
+                                            or the last X minutes = ['full', 'last']
+                                          type: string
+                                        xmax:
+                                          description: For x-y scatterplots, max value
+                                            for X-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                        xmin:
+                                          description: For x-y scatterplots, min value
+                                            for X-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                        y0ScaleSiBy1024:
+                                          description: 'Default: false. Whether to
+                                            scale numerical magnitude labels for left
+                                            Y-axis by 1024 in the IEC/Binary manner
+                                            (instead of by 1000 like SI) ,'
+                                          type: boolean
+                                        y0UnitAutoscaling:
+                                          description: 'Default: false. Whether to
+                                            automatically adjust magnitude labels
+                                            and units for the left Y-axis to favor
+                                            smaller magnitudes and larger units'
+                                          type: boolean
+                                        y1ScaleSiBy1024:
+                                          description: 'Default: false. Whether to
+                                            scale numerical magnitude labels for right
+                                            Y-axis by 1024 in the IEC/Binary manner
+                                            (instead of by 1000 like SI)'
+                                          type: boolean
+                                        y1UnitAutoscaling:
+                                          description: 'Default: false. Whether to
+                                            automatically adjust magnitude labels
+                                            and units for the right Y-axis to favor
+                                            smaller magnitudes and larger units'
+                                          type: boolean
+                                        y1Units:
+                                          description: For plots with multiple Y-axes,
+                                            units for right-side Y-axis
+                                          type: string
+                                        y1max:
+                                          description: For plots with multiple Y-axes,
+                                            max value for right-side Y-axis. Set null
+                                            for auto
+                                          format: double
+                                          type: number
+                                        y1min:
+                                          description: For plots with multiple Y-axes,
+                                            min value for right-side Y-axis. Set null
+                                            for auto
+                                          format: double
+                                          type: number
+                                        ymax:
+                                          description: For x-y scatterplots, max value
+                                            for Y-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                        ymin:
+                                          description: For x-y scatterplots, min value
+                                            for Y-axis. Set null for auto
+                                          format: double
+                                          type: number
+                                      required:
+                                      - type
+                                      type: object
+                                    description:
+                                      description: Description of the chart
+                                      type: string
+                                    name:
+                                      description: Name of the Chart
+                                      type: string
+                                    source:
+                                      description: A collection of Sources for a Chart
+                                      items:
+                                        properties:
+                                          disabled:
+                                            description: Whether to disabled the source
+                                              from being displayed
+                                            type: boolean
+                                          name:
+                                            description: Name of the Source
+                                            type: string
+                                          query:
+                                            description: Query for the Source
+                                            type: string
+                                          queryBuilderEnabled:
+                                            description: Whether the query builder
+                                              should be enabled
+                                            type: boolean
+                                          scatterPlotSource:
+                                            type: string
+                                          sourceDescription:
+                                            description: Description of the source
+                                            type: string
+                                        required:
+                                        - name
+                                        - query
+                                        type: object
+                                      type: array
+                                    summarization:
+                                      description: Summarization strategy for the
+                                        chart. MEAN is default = ['MEAN', 'MEDIAN',
+                                        'MIN', 'MAX', 'SUM', 'COUNT', 'LAST', 'FIRST']
+                                      type: string
+                                    units:
+                                      description: Units of measurements for the chart
+                                      type: string
+                                  required:
+                                  - chartSetting
+                                  - name
+                                  - source
+                                  - summarization
+                                  - units
+                                  type: object
+                                type: array
+                            required:
+                            - chart
+                            type: object
+                          type: array
+                      required:
+                      - name
+                      - row
+                      type: object
+                    type: array
+                  tags:
+                    items:
+                      type: string
+                    type: array
+                  url:
+                    type: string
+                required:
+                - description
+                - name
+                - section
+                - tags
+                - url
+                type: object
+              terminationPolicy:
+                enum:
+                - Delete
+                - DoNotTerminate
+                type: string
+              updatePolicy:
+                enum:
+                - Destroy
+                - DoNotDestroy
+                type: string
+            required:
+            - providerRef
+            - resource
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another. This should be when the underlying condition changed.  If
+                        that is not known, then using the time when the API field
+                        changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition. This field may be empty.
+                      type: string
+                    observedGeneration:
+                      description: If set, this represents the .metadata.generation
+                        that the condition was set based upon. For instance, if .metadata.generation
+                        is currently 12, but the .status.condition[x].observedGeneration
+                        is 9, the condition is out of date with respect to the current
+                        state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: The reason for the condition's last transition
+                        in CamelCase. The specific API may choose whether or not this
+                        field is considered a guaranteed API. This field may not be
+                        empty.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type of condition in CamelCase or in foo.example.com/CamelCase.
+                        Many .condition.type values are consistent across resources
+                        like Available, but because arbitrary conditions can be useful
+                        (see .node.status.conditions), the ability to deconflict is
+                        important.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGeneration:
+                description: Resource generation, which is updated on mutation by
+                  the API Server.
+                format: int64
+                type: integer
+              phase:
+                description: Status defines the set of statuses a resource can have.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
