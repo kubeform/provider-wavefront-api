@@ -3,7 +3,7 @@
 
 # provider-wavefront-api
 
-Kubeform CRDs for [Terraform Wavefront Provider](https://github.com/wavefront/terraform-provider-wavefront)
+Kubeform CRDs for [Terraform Wavefront Provider](https://github.com/vmware/terraform-provider-wavefront)
 
 ## Installation
 
