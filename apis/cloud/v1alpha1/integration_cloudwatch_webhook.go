@@ -89,7 +89,7 @@ func (r *IntegrationCloudwatch) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range integrationcloudwatchForceNewList {
+	for key, _ := range integrationcloudwatchForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

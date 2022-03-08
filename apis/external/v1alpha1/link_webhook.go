@@ -86,7 +86,7 @@ func (r *Link) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range linkForceNewList {
+	for key, _ := range linkForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

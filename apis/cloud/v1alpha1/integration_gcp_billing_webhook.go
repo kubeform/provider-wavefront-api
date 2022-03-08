@@ -88,7 +88,7 @@ func (r *IntegrationGcpBilling) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range integrationgcpbillingForceNewList {
+	for key, _ := range integrationgcpbillingForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false
