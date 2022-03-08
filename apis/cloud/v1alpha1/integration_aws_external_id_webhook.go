@@ -86,7 +86,7 @@ func (r *IntegrationAwsExternalID) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range integrationawsexternalidForceNewList {
+	for key, _ := range integrationawsexternalidForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

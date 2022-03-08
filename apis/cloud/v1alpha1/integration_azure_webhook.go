@@ -88,7 +88,7 @@ func (r *IntegrationAzure) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range integrationazureForceNewList {
+	for key, _ := range integrationazureForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -88,7 +88,7 @@ func (r *IntegrationAzureActivityLog) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range integrationazureactivitylogForceNewList {
+	for key, _ := range integrationazureactivitylogForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false
